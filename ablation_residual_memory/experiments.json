@@ -1,0 +1,30 @@
+{
+  "description": "(b) Residual memory: no residual / 32 / 128 dimensions",
+  "reference": {
+    "slots": 8,
+    "residual_dim": 128,
+    "memory_steps": 60000,
+    "action_steps": 30000,
+    "global_action_batch": 64
+  },
+  "variants": {
+    "no_residual": {
+      "label": "w/o residual memory",
+      "experiment": "no_residual",
+      "config": "configs/no_residual.yaml",
+      "memory_source": "no_residual"
+    },
+    "residual32": {
+      "label": "Residual memory (dz=32)",
+      "experiment": "residual32",
+      "config": "configs/residual32.yaml",
+      "memory_source": "residual32"
+    },
+    "residual128": {
+      "label": "Residual memory (dz=128)*",
+      "experiment": "reference",
+      "config": "configs/residual128.yaml",
+      "memory_source": "reference"
+    }
+  }
+}

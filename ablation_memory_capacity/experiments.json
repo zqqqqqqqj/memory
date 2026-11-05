@@ -1,0 +1,30 @@
+{
+  "description": "(a) Memory capacity: K=4/8/16; residual_dim=128",
+  "reference": {
+    "slots": 8,
+    "residual_dim": 128,
+    "memory_steps": 60000,
+    "action_steps": 30000,
+    "global_action_batch": 64
+  },
+  "variants": {
+    "k4": {
+      "label": "R²Mem (K=4)",
+      "experiment": "capacity_k4",
+      "config": "configs/k4.yaml",
+      "memory_source": "capacity_k4"
+    },
+    "k8": {
+      "label": "R²Mem (K=8)*",
+      "experiment": "reference",
+      "config": "configs/k8.yaml",
+      "memory_source": "reference"
+    },
+    "k16": {
+      "label": "R²Mem (K=16)",
+      "experiment": "capacity_k16",
+      "config": "configs/k16.yaml",
+      "memory_source": "capacity_k16"
+    }
+  }
+}

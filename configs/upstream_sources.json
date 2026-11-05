@@ -1,0 +1,10 @@
+{
+  "RoboMemArena": {
+    "url": "https://github.com/OpenHelix-Team/RoboMemArena.git",
+    "commit": "d09f63b671f362985e1e0d038d2014c2d2519488"
+  },
+  "OpenPI": {
+    "url": "https://github.com/Physical-Intelligence/openpi.git",
+    "commit": "215abfb217dbac7d5f1273282331b9b1866c0479"
+  }
+}

@@ -1,0 +1,193 @@
+# Paths are overridden by ignored server.local.yaml; training settings are fixed.
+project: query_residual_memory_sft_v2
+dataset:
+  repo_id: yinchenghust/robomemarena_lerobot
+  revision: b6595d7af67749d3644056bab0e096194332c1ba
+  format: lerobot_v3
+  root: __LOCAL_DATASET_ROOT__
+  manifest: __LOCAL_MANIFEST__
+  norm_stats: __LOCAL_NORM_STATS__
+  use_subtask_labels_as_policy_input: false
+  split_seed: 20261012
+benchmark:
+  name: robomemarena
+  root: __LOCAL_BENCHMARK_ROOT__
+  commit: d09f63b671f362985e1e0d038d2014c2d2519488
+  p0_tasks:
+  - 1
+  - 4
+  - 6
+  - 12
+  full_tasks: &id001
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  - 19
+  - 20
+  - 21
+  - 22
+  - 23
+  - 24
+  - 25
+  - 26
+  replan_steps: 10
+  max_steps: 2500
+  num_steps_wait: 10
+  post_goal_steps: 200
+  extra_pour_monitor_steps: 30
+  fail_on_extra_pour: true
+  observation_protocol: policy_query_only
+  camera_height: 480
+  camera_width: 640
+  resize_size: 256
+  reward: terminal_official_tsr
+  train_seeds:
+  - 1000000
+  - 1999999999
+  validation_seeds:
+  - 200000
+  - 200009
+  test_seeds:
+  - 50
+  - 100
+  task_schedule: uniform_round_robin
+  mechanism_tasks: null
+model:
+  backbone: pi05_base
+  backend: pytorch
+  openpi_root: __LOCAL_OPENPI_ROOT__
+  openpi_commit: 215abfb217dbac7d5f1273282331b9b1866c0479
+  base_checkpoint_jax: __LOCAL_PI05_JAX__
+  base_checkpoint_pytorch: __LOCAL_PI05_PYTORCH__
+  memory_tokens: 2
+  action_horizon: 20
+  flow_steps: 10
+  discrete_state_input: true
+  random_image_augmentation: false
+  freeze_vision: true
+  lora: false
+  memory_interface_version: separate_capped_v2
+  readout_rms_cap: 4.0
+  memory_token_rms_cap: 1.0
+memory:
+  slots: 8
+  coarse_dim: 256
+  residual_dim: 128
+  query_dim: 256
+  action_dim: 128
+  hidden_dim: 256
+  storage_dtype: bfloat16
+  writer: residual
+  query_conditioned_values: true
+  merge_rule: ward
+  time_scale: 2500.0
+  max_extra_parameters: 8000000
+  writer_version: bounded_count_convex_v2
+  writer_bound: 1.0
+training:
+  tasks: *id001
+  checkpoint_retention: latest_then_milestones
+  save_every: 2000
+  keep_every: 2000
+  keep_from: 14000
+  selection_metric: validation_task_macro_TSR
+schema_version: 4
+plan: README.md
+sft:
+  steps: 30000
+  global_batch_size: 64
+  microbatch_size: 1
+  reference_world_size: 2
+  gradient_accumulation_steps: 32
+  backbone_lr: 5.0e-05
+  memory_lr: 2.0e-05
+  interface_lr: 0.0001
+  warmup_steps: 3000
+  schedule: warmup_constant
+  optimizer: AdamW
+  betas:
+  - 0.9
+  - 0.95
+  eps: 1.0e-08
+  weight_decay: 1.0e-10
+  max_grad_norm: 1.0
+  ema_decay: 0.999
+  eval_every: 6000
+  validation_episodes_per_task: 2
+  parallelism: fsdp_shard_grad_op
+  compute_dtype: bfloat16
+  optimizer_dtype: float32
+  sampling: uniform_task_episode_decision
+  full_prefix_bptt: true
+  random_augmentation: false
+  cache: fixed_history_features_current_visual_tokens
+  gradient_checkpointing: true
+  gradient_sync: optimizer_step
+  backbone_train_patterns:
+  - .*
+  input_pipeline: cached_prefetch
+  prefetch_depth: 1
+  vision_batch_size: 1
+  memory_mode: full
+  memory_initialization: random
+history:
+  feature_kind: fixed_spatial_projection
+  objective: residual
+  reader_mode: full
+  relative_energy_floor: 1.0e-12
+  image_grid: 16
+  camera_indices:
+  - 0
+  - 1
+  teacher_seed: 20261016
+  teacher_scale_floor: 0.01
+  max_queries: 32
+  query_sampling: uniform_temporal_systematic
+  loss_weight: 0.0
+  readout_scale_floor: 0.1
+  joint_supervision: false
+stages:
+  memory:
+    steps: 60000
+    global_batch_size: 4
+    lr: 0.0001
+    validate_every: 250
+    min_validation_gain: 0.01
+    min_prefix_decisions: 17
+    action_checkpoint_step: 60000
+  action:
+    steps: 30000
+    warmup_steps: 3000
+    memory_lr: 2.0e-05
+    interface_lr: 0.0001
+    backbone_lr: 5.0e-05
+validation:
+  enabled: true
+  tasks:
+  - 1
+  - 2
+  - 4
+  - 6
+  episodes_per_task: 2
+  seed_start: 200000
+  timeout_seconds: 1800
+  require_positive_tsr_by_step: 6000
+  min_macro_tsr: 0.0
+ablation:
+  protocol: table2_v1
+  parameter_initialization: named_linear_v1

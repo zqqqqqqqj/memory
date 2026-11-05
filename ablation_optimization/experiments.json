@@ -1,0 +1,36 @@
+{
+  "description": "(c) Optimization: pretraining and joint reconstruction objectives",
+  "reference": {
+    "slots": 8,
+    "residual_dim": 128,
+    "memory_steps": 60000,
+    "action_steps": 30000,
+    "global_action_batch": 64
+  },
+  "variants": {
+    "no_pretraining_no_joint": {
+      "label": "w/o pretraining and joint recon.",
+      "experiment": "no_pretraining_no_joint",
+      "config": "configs/no_pretraining_no_joint.yaml",
+      "memory_source": "no_pretraining_no_joint"
+    },
+    "no_pretraining": {
+      "label": "w/o memory pretraining",
+      "experiment": "no_pretraining",
+      "config": "configs/no_pretraining.yaml",
+      "memory_source": "no_pretraining"
+    },
+    "no_joint": {
+      "label": "w/o joint reconstruction",
+      "experiment": "no_joint",
+      "config": "configs/no_joint.yaml",
+      "memory_source": "reference"
+    },
+    "reference": {
+      "label": "R²Mem*",
+      "experiment": "reference",
+      "config": "configs/reference.yaml",
+      "memory_source": "reference"
+    }
+  }
+}
