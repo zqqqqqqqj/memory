@@ -99,7 +99,7 @@ python scripts/check_server.py
 python -m pytest
 ```
 
-缓存索引与 manifest、文件内容和源代码指纹绑定。不要用字符串替换强行修改旧缓存索引；路径变化后在目标服务器重新准备。本仓库的 `pi05_bridge.py`、固定 teacher、历史损失、写入器和初始化实现保留原方法代码；去除了无关的旧 PPO 入口。
+缓存索引与 manifest、文件内容和源代码指纹绑定。不要用字符串替换强行修改旧缓存索引；路径变化后在目标服务器重新准备。本仓库的 `pi05_bridge.py`、固定 teacher、历史损失、写入器和初始化实现保留原方法代码
 
 ## 运行消融
 
@@ -152,4 +152,3 @@ CUDA_VISIBLE_DEVICES=0 python scripts/evaluate_joint.py \
   --out runs/ablations/reference/seed_11/eval_test
 ```
 
-表中的模拟占位分数不属于实验结果。训练中的 validation 用于权重选择，各变体再用相同 test 方案比较真实 TSR/CSR。
